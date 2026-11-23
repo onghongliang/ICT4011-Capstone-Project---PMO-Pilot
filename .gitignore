@@ -2,24 +2,39 @@
 node_modules/
 **/node_modules/
 
-# Environment variables
+# Environment variables (keep only the committed examples)
 .env
+.env.*
 **/.env
+**/.env.*
 !.env.example
 !**/.env.example
 
-# Build output
+# Build output and caches
 client/dist/
 server/dist/
+dist-ssr/
+coverage/
+.cache/
+.vite/
+*.tsbuildinfo
+.eslintcache
 
 # Logs
+logs/
 *.log
 npm-debug.log*
 
-# Editor/OS
+# Editor / OS
 .DS_Store
+Thumbs.db
+desktop.ini
 .vscode/
 .idea/
+*.swp
+
+# Personal Claude Code settings (shared .claude/settings.json is fine to commit)
+.claude/settings.local.json
 
 # Postgres data (if using docker-compose volumes locally)
 pgdata/

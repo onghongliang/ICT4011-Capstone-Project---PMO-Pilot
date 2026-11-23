@@ -1,19 +1,15 @@
-import express from "express";
-import cors from "cors";
-import "dotenv/config";
+import { createApp } from "./app.js";
+import { config } from "./config/env.js";
+import { registerDisruptionHandlers } from "./services/disruption.service.js";
+import { warmAllowedValuesCache } from "./utils/schemaEnums.js";
 
-import healthRouter from "./routes/health.js";
-import availabilityRouter from "./routes/availability.js";
+// Background listeners (the event-driven rescheduling flow) start with the server.
+registerDisruptionHandlers();
 
-const app = express();
-const PORT = process.env.PORT || 4000;
+warmAllowedValuesCache()
+  .then(() => console.log("Enum validation cache warmed from schema constraints"))
+  .catch((err) => console.error("Failed to warm enum validation cache:", err.message));
 
-app.use(cors());
-app.use(express.json());
-
-app.use("/api/health", healthRouter);
-app.use("/api/availability", availabilityRouter);
-
-app.listen(PORT, () => {
-  console.log(`PMO Pilot server running on http://localhost:${PORT}`);
+createApp().listen(config.port, () => {
+  console.log(`PMO Pilot server running on http://localhost:${config.port}`);
 });
